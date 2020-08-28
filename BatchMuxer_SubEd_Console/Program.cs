@@ -16,7 +16,7 @@ namespace BatchMuxer_SubEd_Console
         /// <summary>
         /// Merge subtitles with their video files in the selected directory.
         /// </summary>
-        /// <param name="folder">The directory name</param>
+        /// <param name="path">The directory name</param>
         static void Main(string[] args)
         {
             DirectoryInfo folder=new DirectoryInfo(args[0]);
