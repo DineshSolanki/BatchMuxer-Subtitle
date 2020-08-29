@@ -8,7 +8,7 @@ This is the Cross-Plateform Console version of the [BatchMuxer-Subtitle Edition]
 # Configuration
 * In "appsettings.json" there are Two configuration - "mkvMergePath" and "autoCleanUp".
 * mkvMergePath is for windows to sepcify path to MkvMerge
-* set autoCleanUp: true, to automatically delete original files and replace with muxed files (**See in GIF**)
+* set autoCleanUp: true, to automatically delete original files and replace with muxed files [Defualt- true] (**See in GIF**)
 ***
 # in action-
 ![BatchMuxer](https://github.com/DineshSolanki/Project-Assets/blob/master/BatchMuxer/BatchMuxerConsole.gif)
