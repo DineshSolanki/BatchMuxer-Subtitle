@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+
 namespace BatchMuxer_SubEd_Console.Model
 {
-    
-
     public static class ThisOperatingSystem
     {
         public static OSPlatform CurrentOS = IsWindows() ? OSPlatform.Windows : IsLinux() ? OSPlatform.Linux : IsMacOS() ? OSPlatform.OSX : OSPlatform.Create("other");
+
         public static bool IsWindows() =>
             RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 

@@ -3,23 +3,23 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Linq;
-using static BatchMuxer_SubEd_Console.Methods.Methods;
+using static BatchMuxer_SubEd_Console.Classes.util;
 
 namespace BatchMuxer_SubEd_Console
 {
-    class Program
+    internal class Program
     {
-        
-        static string MKVmergePath;
-        static readonly string[] Extensions = { ".mkv", ".webm", ".mp4" };
-        static FileInfo[] fi=null;
+        private static string MKVmergePath;
+        private static readonly string[] Extensions = { ".mkv", ".webm", ".mp4" };
+        private static FileInfo[] fi = null;
+
         /// <summary>
         /// Merge subtitles with their video files in the selected directory.
         /// </summary>
-        /// <param name="path">The directory name</param>
-        static void Main(string[] args)
+        /// <param name="args">The directory name</param>
+        private static void Main(string[] args)
         {
-            DirectoryInfo folder=new DirectoryInfo(args[0]);
+            DirectoryInfo folder = new DirectoryInfo(args[0]);
             IConfiguration config = new ConfigurationBuilder()
           .AddJsonFile("appsettings.json", true, true)
           .Build();
@@ -32,10 +32,10 @@ namespace BatchMuxer_SubEd_Console
                 {
                     Console.WriteLine("MkvMerge Path is invalid or not set, Please input path to MKVMerge. eg- C:\\MkvToolnix\\");
                     string temp = Console.ReadLine();
-                   
+
                     if (File.Exists(Path.Join(temp, @"mkvmerge.exe")))
                     {
-                        WriteToConfig("mkvMergePath",temp);
+                        WriteToConfig("mkvMergePath", temp);
                         MKVmergePath = temp;
                     }
                     else
@@ -45,36 +45,36 @@ namespace BatchMuxer_SubEd_Console
                     }
                 }
             }
-           
-            bool ProceedFurther=true;
+
+            bool ProceedFurther = true;
 
             folder ??= new DirectoryInfo(".");
             if (folder.Exists)
             {
                 try
                 {
-                     fi = folder.EnumerateFiles()
-                        .Where(f => Extensions.Contains(f.Extension.ToLower()))
-                        .ToArray();
+                    fi = folder.EnumerateFiles()
+                       .Where(f => Extensions.Contains(f.Extension.ToLower()))
+                       .ToArray();
                     RenameFile(fi);
                 }
                 catch (UnauthorizedAccessException exception)
                 {
                     Console.WriteLine(exception.Message);
-                    ProceedFurther=false;
+                    ProceedFurther = false;
                 }
             }
             else
             {
                 Console.WriteLine("Directory does not exist!");
-                ProceedFurther=false;
+                ProceedFurther = false;
             }
             if (ProceedFurther)
             {
-                Console.Write("Muxing Subtitles...");
+                Console.WriteLine("Muxing Subtitles...");
                 using (var progress = new ProgressBar())
                 {
-                    for(int i = 0; i < fi.Length; ++i)
+                    for (int i = 0; i < fi.Length; ++i)
                     {
                         ProcessFile(fi[i], folder.FullName, MKVmergePath);
                         progress.Report((double)i / fi.Length);
@@ -82,9 +82,9 @@ namespace BatchMuxer_SubEd_Console
                 }
                 if (appConfig.AutoCleanUp)
                 {
-                    DeleteAndMove(fi,folder.FullName);
+                    DeleteAndMove(fi, folder.FullName);
                 }
-                Console.WriteLine("\nDone. Press any key to Exit...");
+                Console.WriteLine("Done. Press any key to Exit...");
                 Console.ReadKey(true);
             }
         }

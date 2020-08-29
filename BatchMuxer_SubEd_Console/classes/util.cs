@@ -1,17 +1,21 @@
 ﻿using BatchMuxer_SubEd_Console.Model;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 
-namespace BatchMuxer_SubEd_Console.Methods
-{
-    public static class Methods
+namespace BatchMuxer_SubEd_Console.Classes
+{/// <summary>
+/// utilility helper class
+/// </summary>
+    public static class util
     {
+        /// <summary>
+        /// Renames other extension to MKV
+        /// </summary>
+        /// <param name="fi">File info array containing files to rename</param>
+        /// <returns></returns>
         public static bool RenameFile(FileInfo[] fi)
         {
             bool hasRenamed = false;
@@ -26,20 +30,27 @@ namespace BatchMuxer_SubEd_Console.Methods
 
             return hasRenamed;
         }
-        public static void ProcessFile(FileInfo fl, string path,string mkvmergePath)
+
+        /// <summary>
+        /// Muxes file using MKVMerge
+        /// </summary>
+        /// <param name="fl"> media file</param>
+        /// <param name="path">Path of the media and subtitle</param>
+        /// <param name="mkvmergePath">path to MKVmerge</param>
+        public static void ProcessFile(FileInfo fl, string path, string mkvmergePath)
         {
             string subtitle = $@"""{fl.FullName.Replace(fl.Extension, ".srt")}""";
-            string fileName =$@"""{fl.FullName}""";
+            string fileName = $@"""{fl.FullName}""";
             if (fl.Extension != ".mkv")
             {
                 File.Move(fl.FullName, fl.FullName.Replace(fl.Extension, ".mkv"));//caution!
             }
 
-            if (File.Exists(subtitle.Replace("\"","")) &&
+            if (File.Exists(subtitle.Replace("\"", "")) &&
                 !File.Exists(path + @"\muxed\" + fl.Name))
             {
-                string output =@$"""{path}\muxed\{fl.Name}""";
-                string mkvPath=ThisOperatingSystem.IsWindows()?Path.Join(mkvmergePath,"mkvmerge.exe"):"mkvmerge";
+                string output = @$"""{path}\muxed\{fl.Name}""";
+                string mkvPath = ThisOperatingSystem.IsWindows() ? Path.Join(mkvmergePath, "mkvmerge.exe") : "mkvmerge";
                 ProcessStartInfo startInfo = new ProcessStartInfo(mkvPath)
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
@@ -62,20 +73,31 @@ namespace BatchMuxer_SubEd_Console.Methods
                     Console.WriteLine(ex.Message);
                     Console.WriteLine(@"*** Make sure ""MKVMerge"" is installed and set in PATH");
                 }
-                
             }
         }
-        public static void WriteToConfig(string key,string value)
+
+        /// <summary>
+        /// Update appsetting.json
+        /// </summary>
+        /// <param name="key">key to update</param>
+        /// <param name="value">new value</param>
+        public static void WriteToConfig(string key, string value)
         {
             string json = File.ReadAllText("appsettings.json");
-            var application=new Application();
+            var application = new Application();
             JsonConvert.PopulateObject(json, application);
             dynamic jsonObj = JsonConvert.DeserializeObject(json);
             jsonObj["application"][key] = value;
             string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
             File.WriteAllText("appsettings.json", output);
         }
-        public static void DeleteAndMove(FileInfo[] files,string path)
+
+        /// <summary>
+        /// Deletes original Media files and move files from "muxed" to original folder.
+        /// </summary>
+        /// <param name="files">Files to move</param>
+        /// <param name="path">Full folder path</param>
+        public static void DeleteAndMove(FileInfo[] files, string path)
         {
             foreach (var fl in files)
             {
@@ -91,9 +113,12 @@ namespace BatchMuxer_SubEd_Console.Methods
             if (IsDirectoryEmpty(path + @"\muxed"))
                 Directory.Delete(path + @"\muxed");
         }
-        public static bool IsDirectoryEmpty(string path)
-        {
-            return !Directory.EnumerateFileSystemEntries(path).Any();
-        }
+
+        /// <summary>
+        /// Checks if a diretory is empty by enumerating through path
+        /// </summary>
+        /// <param name="path">Directory to check</param>
+        /// <returns></returns>
+        public static bool IsDirectoryEmpty(string path) => !Directory.EnumerateFileSystemEntries(path).Any();
     }
 }

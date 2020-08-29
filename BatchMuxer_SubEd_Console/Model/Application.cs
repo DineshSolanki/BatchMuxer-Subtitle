@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BatchMuxer_SubEd_Console.Model
 {
@@ -12,6 +9,6 @@ namespace BatchMuxer_SubEd_Console.Model
         public string MkvMergePath { get; set; }
 
         [JsonProperty("autoCleanUp")]
-        public bool AutoCleanUp { get;set;}
+        public bool AutoCleanUp { get; set; }
     }
 }

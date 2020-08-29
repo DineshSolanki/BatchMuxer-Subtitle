@@ -102,7 +102,5 @@ namespace BatchMuxer_SubEd_Console.Model
                 UpdateText(string.Empty);
             }
         }
-
     }
-
 }
