@@ -2,7 +2,7 @@
   "profiles": {
     "BatchMuxer_SubEd_Console": {
       "commandName": "Project",
-      "commandLineArgs": "--folder \"E:\\Web series(s)\\9-1-1\\Season 3\""
+      "commandLineArgs": "\"E:\\Web series(s)\\Lucifer\\Season 1\""
     }
   }
 }

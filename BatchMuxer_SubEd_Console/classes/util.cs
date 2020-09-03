@@ -10,7 +10,7 @@ namespace BatchMuxer_SubEd_Console.Classes
 {/// <summary>
 /// utilility helper class
 /// </summary>
-    public static class util
+    public static class Util
     {
         /// <summary>
         /// Deletes original Media files and move files from "muxed" to original folder.
@@ -19,19 +19,23 @@ namespace BatchMuxer_SubEd_Console.Classes
         /// <param name="path">Full folder path</param>
         public static void DeleteAndMove(FileInfo[] files, string path)
         {
-            foreach (var fl in files)
+            if (!Directory.Exists(Path.Combine(path, "muxed"))){
+                return;
+            }
+            string muxedPath=Path.Combine(path, "muxed");
+            foreach (FileInfo fl in files)
             {
-                var subtitle = fl.Name.Replace(fl.Extension, ".srt");
-                var subtitlePath = fl.FullName.Replace(fl.Extension, ".srt");
-                if (File.Exists(path + @"\" + subtitle) && File.Exists(path + @"\muxed\" + fl.Name))
+                string subtitlePath = fl.FullName.Replace(fl.Extension, ".srt");
+                string muxedFilePath= Path.Combine(path, "muxed", fl.Name);
+                if (File.Exists(subtitlePath )&& File.Exists(muxedFilePath))
                 {
                     File.Delete(fl.FullName);
                     File.Delete(subtitlePath);
-                    File.Move(path + @"\muxed\" + fl.Name, fl.FullName);
+                    File.Move(muxedFilePath, fl.FullName);
                 }
             }
-            if (IsDirectoryEmpty(path + @"\muxed"))
-                Directory.Delete(path + @"\muxed");
+            if (IsDirectoryEmpty(muxedPath))
+                Directory.Delete(muxedPath);
         }
 
         /// <summary>
@@ -55,10 +59,11 @@ namespace BatchMuxer_SubEd_Console.Classes
             {
                 File.Move(fl.FullName, fl.FullName.Replace(fl.Extension, ".mkv"));//caution!
             }
+            string muxedFilePath = Path.Combine(path, "muxed", fl.Name);
             if (File.Exists(subtitle.Replace("\"", "")) &&
-                !File.Exists(Path.Combine(path + "muxed" + fl.Name)))
+                !File.Exists(muxedFilePath))
             {
-                string output = @$"""{Path.Combine(path, "muxed", fl.Name)}""";
+                string output = @$"""{muxedFilePath}""";
                 string mkvPath = ThisOperatingSystem.IsWindows() ? Path.Combine(mkvmergePath, "mkvmerge.exe") : "mkvmerge";
                 ProcessStartInfo startInfo = new ProcessStartInfo(mkvPath)
                 {
@@ -70,13 +75,13 @@ namespace BatchMuxer_SubEd_Console.Classes
                 };
                 try
                 {
-                    var oProcess = new Process
+                    Process oProcess = new Process
                     {
                         StartInfo = startInfo
                     };
                     oProcess.Start();
                     oProcess.WaitForExit();
-                    var r = oProcess.StandardOutput;
+                    StreamReader r = oProcess.StandardOutput;
                     oProcess.Dispose();
                 }
                 catch (Exception ex)
@@ -95,7 +100,7 @@ namespace BatchMuxer_SubEd_Console.Classes
         public static bool RenameFile(FileInfo[] fi)
         {
             bool hasRenamed = false;
-            foreach (var fl in fi)
+            foreach (FileInfo fl in fi)
             {
                 if (fl.Extension != ".mkv")
                 {
@@ -117,7 +122,7 @@ namespace BatchMuxer_SubEd_Console.Classes
             string appSettingPath = 
                 Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "appsettings.json");
             string json = File.ReadAllText(appSettingPath);
-            var application = new Application();
+            Application application = new Application();
             JsonConvert.PopulateObject(json, application);
             dynamic jsonObj = JsonConvert.DeserializeObject(json);
             jsonObj["application"][key] = value;

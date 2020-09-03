@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Linq;
-using static BatchMuxer_SubEd_Console.Classes.util;
+using static BatchMuxer_SubEd_Console.Classes.Util;
 
 namespace BatchMuxer_SubEd_Console
 {
@@ -19,12 +19,13 @@ namespace BatchMuxer_SubEd_Console
         /// <param name="args">The directory name</param>
         private static void Main(string[] args)
         {
+            System.AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
             DirectoryInfo folder = new DirectoryInfo(args[0]);
 
             IConfiguration config = new ConfigurationBuilder()
           .AddJsonFile("appsettings.json", true, true)
           .Build();
-            var appConfig = config.GetSection("application").Get<Application>(); ;
+            Application appConfig = config.GetSection("application").Get<Application>(); ;
             MKVmergePath = appConfig.MkvMergePath;
 
             if (ThisOperatingSystem.IsWindows())
@@ -73,7 +74,7 @@ namespace BatchMuxer_SubEd_Console
             if (ProceedFurther)
             {
                 Console.WriteLine("Muxing Subtitles...");
-                using (var progress = new ProgressBar())
+                using (ProgressBar progress = new ProgressBar())
                 {
                     for (int i = 0; i < fi.Length; ++i)
                     {
@@ -88,6 +89,13 @@ namespace BatchMuxer_SubEd_Console
                 Console.WriteLine("Done. Press any key to Exit...");
                 Console.ReadKey(true);
             }
+        }
+        static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine(e.ExceptionObject.ToString());
+            Console.WriteLine("Press Enter to continue");
+            Console.ReadLine();
+            Environment.Exit(1);
         }
     }
 }
