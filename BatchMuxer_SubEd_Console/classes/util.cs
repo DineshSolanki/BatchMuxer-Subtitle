@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace BatchMuxer_SubEd_Console.Classes
 {/// <summary>
@@ -105,6 +106,7 @@ namespace BatchMuxer_SubEd_Console.Classes
 
             return hasRenamed;
         }
+
         /// <summary>
         /// Update appsetting.json
         /// </summary>
@@ -112,13 +114,15 @@ namespace BatchMuxer_SubEd_Console.Classes
         /// <param name="value">new value</param>
         public static void WriteToConfig(string key, string value)
         {
-            string json = File.ReadAllText("appsettings.json");
+            string appSettingPath = 
+                Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "appsettings.json");
+            string json = File.ReadAllText(appSettingPath);
             var application = new Application();
             JsonConvert.PopulateObject(json, application);
             dynamic jsonObj = JsonConvert.DeserializeObject(json);
             jsonObj["application"][key] = value;
             string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
-            File.WriteAllText("appsettings.json", output);
+            File.WriteAllText(appSettingPath, output);
         }
     }
 }
