@@ -45,18 +45,22 @@ namespace BatchMuxer_SubEd_Console.Classes
             {
                 File.Move(fl.FullName, fl.FullName.Replace(fl.Extension, ".mkv"));//caution!
             }
-
-            if (File.Exists(subtitle.Replace("\"", "")) &&
-                !File.Exists(path + @"\muxed\" + fl.Name))
+            if(!Directory.Exists(Path.Combine(path + "muxed")))
             {
-                string output = @$"""{path}\muxed\{fl.Name}""";
-                string mkvPath = ThisOperatingSystem.IsWindows() ? Path.Join(mkvmergePath, "mkvmerge.exe") : "mkvmerge";
+                Directory.CreateDirectory(Path.Combine(path + "muxed"));
+            }
+            if (File.Exists(subtitle.Replace("\"", "")) &&
+                !File.Exists(Path.Combine(path + "muxed" + fl.Name)))
+            {
+                string output = @$"""{Path.Combine(path,"muxed",fl.Name)}""";
+                string mkvPath = ThisOperatingSystem.IsWindows() ? Path.Combine(mkvmergePath, "mkvmerge.exe") : "mkvmerge";
                 ProcessStartInfo startInfo = new ProcessStartInfo(mkvPath)
                 {
                     WindowStyle = ProcessWindowStyle.Hidden,
                     //WorkingDirectory = mkvmergePath,
                     Arguments = $@"-o {output} --default-track 0:yes {subtitle} {fileName}",
                     CreateNoWindow = true,
+                   RedirectStandardOutput=true,
                 };
                 try
                 {
@@ -66,6 +70,7 @@ namespace BatchMuxer_SubEd_Console.Classes
                     };
                     oProcess.Start();
                     oProcess.WaitForExit();
+                    var r=oProcess.StandardOutput;
                     oProcess.Dispose();
                 }
                 catch (Exception ex)
@@ -122,3 +127,5 @@ namespace BatchMuxer_SubEd_Console.Classes
         public static bool IsDirectoryEmpty(string path) => !Directory.EnumerateFileSystemEntries(path).Any();
     }
 }
+//TODO: Parse JSON paths
+//FIX directory for linux

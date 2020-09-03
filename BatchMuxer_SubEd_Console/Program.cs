@@ -19,6 +19,7 @@ namespace BatchMuxer_SubEd_Console
         /// <param name="args">The directory name</param>
         private static void Main(string[] args)
         {
+            
             DirectoryInfo folder = new DirectoryInfo(args[0]);
             IConfiguration config = new ConfigurationBuilder()
           .AddJsonFile("appsettings.json", true, true)
@@ -66,7 +67,7 @@ namespace BatchMuxer_SubEd_Console
             }
             else
             {
-                Console.WriteLine("Directory does not exist!");
+                Console.WriteLine("Directory does not exist! -" + folder.ToString());
                 ProceedFurther = false;
             }
             if (ProceedFurther)
