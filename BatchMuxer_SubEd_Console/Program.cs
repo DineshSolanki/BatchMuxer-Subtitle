@@ -19,8 +19,8 @@ namespace BatchMuxer_SubEd_Console
         /// <param name="args">The directory name</param>
         private static void Main(string[] args)
         {
-            
             DirectoryInfo folder = new DirectoryInfo(args[0]);
+
             IConfiguration config = new ConfigurationBuilder()
           .AddJsonFile("appsettings.json", true, true)
           .Build();
