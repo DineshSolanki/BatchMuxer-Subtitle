@@ -49,7 +49,7 @@ namespace BatchMuxer_SubEd_Console
             }
 
             bool ProceedFurther = true;
-
+            DeleteLogFile();
             folder ??= new DirectoryInfo(".");
             if (folder.Exists)
             {
@@ -94,7 +94,7 @@ namespace BatchMuxer_SubEd_Console
         {
             Console.WriteLine(e.ExceptionObject.ToString());
             Console.WriteLine("Press Enter to continue");
-            Console.ReadLine();
+            Console.ReadKey(true);
             Environment.Exit(1);
         }
     }

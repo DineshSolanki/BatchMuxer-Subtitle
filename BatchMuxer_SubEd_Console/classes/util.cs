@@ -82,6 +82,9 @@ namespace BatchMuxer_SubEd_Console.Classes
                     oProcess.Start();
                     oProcess.WaitForExit();
                     StreamReader r = oProcess.StandardOutput;
+                   string logOutputfile=Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "outputLog.txt");
+                   
+                    File.AppendAllText(logOutputfile,r.ReadToEnd());
                     oProcess.Dispose();
                 }
                 catch (Exception ex)
@@ -128,6 +131,11 @@ namespace BatchMuxer_SubEd_Console.Classes
             jsonObj["application"][key] = value;
             string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
             File.WriteAllText(appSettingPath, output);
+        }
+        public static void DeleteLogFile()
+        {
+            string logOutputfile = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "outputLog.txt");
+            if (File.Exists(logOutputfile)) File.Delete(logOutputfile);
         }
     }
 }
