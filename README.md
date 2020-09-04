@@ -4,7 +4,9 @@ This is the Cross-Plateform Console version of the [BatchMuxer-Subtitle Edition]
 ### [Get Windows GUI version here](https://github.com/DineshSolanki/Batch-Muxer-Subtitle-Edition "BatchMuxer-Subtitle-GUI")
 # Usage
 > **BatchMuxer_Subtitle_Console "Path to your Media"**
-
+***
+# QuickTip
+>Run "AddtoRightClick.bat" to add the application to windows context menu for easy access.
 # Configuration
 * In "appsettings.json" there are Two configuration - "mkvMergePath" and "autoCleanUp".
 * mkvMergePath is for windows to sepcify path to MkvMerge
