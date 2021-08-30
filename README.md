@@ -1,7 +1,7 @@
 <img src="https://img.shields.io/travis/com/DineshSolanki/BatchMuxer-Subtitle?logo=Travis-CI&logoColor=green&style=plastic">
 
 # BatchMuxer-Subtitle
-This is the Cross-Plateform Console version of the [BatchMuxer-Subtitle Edition](https://github.com/DineshSolanki/Batch-Muxer-Subtitle-Edition "BatchMuxer-Subtitle-GUI")
+This is the Cross-Plateform Console version of the [BatchMuxer-Subtitle Edition](https://github.com/DineshSolanki/BatchMuxer_Sub "BatchMuxer-Subtitle-GUI")
 ***
 ### [Get Windows GUI version here](https://github.com/DineshSolanki/Batch-Muxer-Subtitle-Edition "BatchMuxer-Subtitle-GUI")
 # Usage
