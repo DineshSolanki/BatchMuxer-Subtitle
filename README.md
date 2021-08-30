@@ -3,7 +3,7 @@
 # BatchMuxer-Subtitle
 This is the Cross-Plateform Console version of the [BatchMuxer-Subtitle Edition](https://github.com/DineshSolanki/BatchMuxer_Sub "BatchMuxer-Subtitle-GUI")
 ***
-### [Get Windows GUI version here](https://github.com/DineshSolanki/Batch-Muxer-Subtitle-Edition "BatchMuxer-Subtitle-GUI")
+### [Get Windows GUI version here](https://github.com/DineshSolanki/BatchMuxer_Sub "BatchMuxer-Subtitle-GUI")
 # Usage
 > **BatchMuxer_Subtitle_Console "Path to your Media"**
 ***
